@@ -1,0 +1,15 @@
+{
+  "name": "smart-echo",
+  "version": "1.0.0",
+  "description": "This is an ai developer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "smart-echo"
+  },
+  "author": "Souvik",
+  "license": "ISC"
+}
