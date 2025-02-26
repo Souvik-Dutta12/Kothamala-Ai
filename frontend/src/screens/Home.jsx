@@ -8,9 +8,9 @@ const Home = () => {
     const { user } = useContext(UserContext)
     const [ isModalOpen, setIsModalOpen ] = useState(false)
     const [ projectName, setProjectName ] = useState(null)
-    // const [ project, setProject ] = useState([])
+    const [ project, setProject ] = useState([])
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     function createProject(e) {
         e.preventDefault()
@@ -28,15 +28,15 @@ const Home = () => {
             })
     }
 
-    // useEffect(() => {
-    //     axios.get('/projects/all').then((res) => {
-    //         setProject(res.data.projects)
+    useEffect(() => {
+        axios.get('/projects/all').then((res) => {
+            console.log(res.data.projects)
+            setProject(res.data.projects)
+        }).catch(err => {
+            console.log(err)
+        })
 
-    //     }).catch(err => {
-    //         console.log(err)
-    //     })
-
-    // }, [])
+    }, [])
 
     return (
         <main className='p-4'>
@@ -47,7 +47,6 @@ const Home = () => {
                     New Project
                     <i className="ri-link ml-2"></i>
                 </button>
-{/* 
                 {
                     project.map((project) => (
                         <div key={project._id}
@@ -69,7 +68,7 @@ const Home = () => {
                         </div>
                     ))
                 }
- */}
+ 
 
             </div>
 
