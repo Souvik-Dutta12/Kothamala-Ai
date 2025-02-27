@@ -27,11 +27,13 @@ const Home = () => {
                 console.log(error)
             })
     }
+    
 
     useEffect(() => {
         axios.get('/projects/all').then((res) => {
-            console.log(res.data.projects)
+            // console.log(res.data)
             setProject(res.data.projects)
+
         }).catch(err => {
             console.log(err)
         })
@@ -47,6 +49,7 @@ const Home = () => {
                     New Project
                     <i className="ri-link ml-2"></i>
                 </button>
+
                 {
                     project.map((project) => (
                         <div key={project._id}
@@ -68,7 +71,7 @@ const Home = () => {
                         </div>
                     ))
                 }
- 
+
 
             </div>
 
@@ -95,7 +98,6 @@ const Home = () => {
 
 
         </main>
-
     )
 }
 
