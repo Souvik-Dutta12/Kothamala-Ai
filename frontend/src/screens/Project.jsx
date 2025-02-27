@@ -1,6 +1,8 @@
 import axios from '../config/axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { initializeSocket,receiveMessage,sendMessage } from '../config/socket'
+import { UserContext } from '../context/user.context.jsx'
 
 const Project = () => {
     const location = useLocation()
@@ -9,8 +11,11 @@ const Project = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState([])
     const [project, setProject] = useState(location.state.project)
-
+    const [ message, setMessage ] = useState('')
+    const {user} = useContext(UserContext)
     const [users, setUsers] = useState([])
+    const messageBox = React.createRef()
+
     const handleUserClick = (id) => {
         setSelectedUserId(prevSelectedUserId => {
             const newSelectedUserId = new Set(prevSelectedUserId);
@@ -41,8 +46,24 @@ const Project = () => {
 
     }
 
+    const send = ()=>{
+
+        sendMessage('project-message',{
+            message,
+            sender: user
+        })
+        setMessage("")
+    }
+
 
     useEffect(() => {
+
+        initializeSocket(project._id);
+
+        receiveMessage('project-message', data =>{
+            console.log(data)
+        })
+
         axios.get(`/projects/get-project/${location.state.project._id}`).then(res => {
 
             console.log(res.data.project)
@@ -50,12 +71,33 @@ const Project = () => {
             setProject(res.data.project)
             // setFileTree(res.data.project.fileTree || {})
         })
+
         axios.get('/users/all').then(res => {
             setUsers(res.data.users)
         }).catch(err => {
             console.log(err)
         })
+
+        // appendIncomingMessage(data)
     }, [])
+
+    // function appendIncomingMessage(messageObject){
+
+    //     const messageBox = document.querySelector('.message-box')
+
+    //     const message = document.createElement('div')
+    //     message.classList.add('message','max-w-56','flex','flex-col','p-2', 'bg-slate-50', 'w-fit' ,'rounded-md')
+    //     message.innerHTML = `
+    //         <small class="opacity-65 text-xs">${messageObject.sender}</small>
+    //         <p class='text-sm'>${messageObject.message}</p>
+    //     `
+        
+    //     messageBox.appendChild(message)
+        
+
+    // }
+
+
     return (
         <main
             className='h-screen w-screen flex'>
@@ -82,7 +124,9 @@ const Project = () => {
 
 
                 <div className="conversation-area flex-grow flex flex-col">
-                    <div className="message-box p-1 flex-grow flex flex-col gap-1">
+                    <div
+                    ref={messageBox}
+                    className="message-box p-1 flex-grow flex flex-col gap-1">
                         <div className="incomming max-w-56 message flex flex-col p-2 bg-slate-50 w-fit rounded-md">
                             <small className='opacity-65 text-xs'>example@gmail.com</small>
                             <p className='text-sm'>Lorem ipsum dolor sit amet.
@@ -96,9 +140,12 @@ const Project = () => {
                     </div>
                     <div className="input-field w-full flex ">
                         <input
+                            value={message}
+                            onChange={(e)=> setMessage(e.target.value)}
                             className='p-2 bg-white px-4 border-none flex-grow outline-none'
                             type="text" placeholder='Enter message' />
                         <button
+                            onClick={send}
                             className='px-5 bg-slate-950 text-white'><i className='ri-send-plane-fill'></i></button>
                     </div>
                 </div>
