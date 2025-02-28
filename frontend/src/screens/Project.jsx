@@ -1,8 +1,9 @@
 import axios from '../config/axios'
-import React, { useEffect, useState,useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { initializeSocket,receiveMessage,sendMessage } from '../config/socket'
+import { initializeSocket, receiveMessage, sendMessage } from '../config/socket'
 import { UserContext } from '../context/user.context.jsx'
+import Markdown from 'markdown-to-jsx'
 
 const Project = () => {
     const location = useLocation()
@@ -11,10 +12,11 @@ const Project = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState([])
     const [project, setProject] = useState(location.state.project)
-    const [ message, setMessage ] = useState('')
-    const {user} = useContext(UserContext)
+    const [message, setMessage] = useState('')
+    const { user } = useContext(UserContext)
     const [users, setUsers] = useState([])
     const messageBox = React.createRef()
+    const [messages, setMessages] = useState([])
 
     const handleUserClick = (id) => {
         setSelectedUserId(prevSelectedUserId => {
@@ -46,14 +48,14 @@ const Project = () => {
 
     }
 
-    const send = ()=>{
+    const send = () => {
 
-        sendMessage('project-message',{
+        sendMessage('project-message', {
             message,
             sender: user,
         })
 
-        appendOutgoingMessage(message);
+        setMessages(prevMessages => [...prevMessages, { sender: user, message }]) // Update messages state
         setMessage("")
     }
 
@@ -62,9 +64,8 @@ const Project = () => {
 
         initializeSocket(project._id);
 
-        receiveMessage('project-message', data =>{
-            console.log(data)
-            appendIncomingMessage(data)
+        receiveMessage('project-message', data => {
+            setMessages(prevMessages => [...prevMessages, data]) // Update messages state
         })
 
         axios.get(`/projects/get-project/${location.state.project._id}`).then(res => {
@@ -81,38 +82,9 @@ const Project = () => {
             console.log(err)
         })
 
-        
+
     }, [])
 
-    function appendIncomingMessage(messageObject){
-
-        const messageBox = document.querySelector('.message-box')
-
-        const message = document.createElement('div')
-        message.classList.add('message','max-w-56','flex','flex-col','p-2', 'bg-slate-50', 'w-fit' ,'rounded-md')
-        message.innerHTML = `
-            <small class="opacity-65 text-xs">${messageObject.sender}</small>
-            <p class='text-sm'>${messageObject.message}</p>
-        `
-        
-        messageBox.appendChild(message)
-        scrollToBottom()
-    }
-
-    function appendOutgoingMessage(message){
-
-        const messageBox = document.querySelector('.message-box')
-
-        const newMessage = document.createElement('div')
-        newMessage.classList.add('ml-auto','message','max-w-56','flex','flex-col','p-2', 'bg-slate-50', 'w-fit' ,'rounded-md')
-        newMessage.innerHTML = `
-            <small class="opacity-65 text-xs">${user.email}</small>
-            <p class='text-sm'>${message}</p>
-        `
-        
-        messageBox.appendChild(newMessage);
-        scrollToBottom();
-    }
 
 
     function scrollToBottom() {
@@ -147,15 +119,24 @@ const Project = () => {
                 <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
 
                     <div
-                    ref={messageBox}
-                    className="message-box overflow-auto max-h-full p-1 flex-grow flex flex-col gap-1">
-                        
+                        ref={messageBox}
+                        className="message-box overflow-auto max-h-full p-1 flex-grow flex flex-col gap-1">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={`${msg.sender._id === 'ai' ? 'max-w-80' : 'max-w-52'} ${msg.sender._id == user._id.toString() && 'ml-auto'}  message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}>
+                                <small className='opacity-65 text-xs'>{msg.sender.email}</small>
+                                <div className='text-sm'>
+                                    {msg.sender._id === 'ai' ?
+                                        WriteAiMessage(msg.message)
+                                        : <p>{msg.message}</p>}
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    
+
                     <div className="input-field w-full flex absolute bottom-0">
                         <input
                             value={message}
-                            onChange={(e)=> setMessage(e.target.value)}
+                            onChange={(e) => setMessage(e.target.value)}
                             className='p-2 bg-white px-4 border-none flex-grow outline-none'
                             type="text" placeholder='Enter message' />
                         <button
