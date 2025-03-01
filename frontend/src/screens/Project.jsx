@@ -18,6 +18,25 @@ const Project = () => {
     const messageBox = React.createRef()
     const [messages, setMessages] = useState([])
 
+
+
+    function SyntaxHighlightedCode(props) {
+        const ref = useRef(null)
+    
+        React.useEffect(() => {
+            if (ref.current && props.className?.includes('lang-') && window.hljs) {
+                window.hljs.highlightElement(ref.current)
+    
+                // hljs won't reprocess the element unless this attribute is removed
+                ref.current.removeAttribute('data-highlighted')
+            }
+        }, [ props.className, props.children ])
+    
+        return <code {...props} ref={ref} />
+    }
+    
+    
+
     const handleUserClick = (id) => {
         setSelectedUserId(prevSelectedUserId => {
             const newSelectedUserId = new Set(prevSelectedUserId);
@@ -57,6 +76,26 @@ const Project = () => {
 
         setMessages(prevMessages => [...prevMessages, { sender: user, message }]) // Update messages state
         setMessage("")
+    }
+
+
+    function WriteAiMessage(message) {
+
+        const messageObject = JSON.parse(message)
+
+        return (
+            <div
+                className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
+            >
+                <Markdown
+                    children={messageObject.text}
+                    options={{
+                        overrides: {
+                            code: SyntaxHighlightedCode,
+                        },
+                    }}
+                />
+            </div>)
     }
 
 
