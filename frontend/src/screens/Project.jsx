@@ -185,6 +185,16 @@ const Project = () => {
     }
 
     return (
+
+        <>
+        <div className="logo flex items-center bg-gray-900">
+                <img src="/logo.png" alt="logo" className="w-18 h-18 mb-2" />
+                <p className="text-4xl font-bold text-white">
+                    Kothamala 
+                    <span className="text-blue-500"> Ai</span>
+                </p>
+            </div>
+        
         <main className='main-container h-screen w-screen flex flex-col md:flex-row bg-gray-900 text-white'>
             <section className="left left-section relative flex flex-col h-full w-full md:w-1/4 bg-gray-800">
                 <header className='flex justify-between items-center p-2 px-4 w-full bg-gray-700 absolute z-10 top-0'>
@@ -421,6 +431,7 @@ const Project = () => {
                 </div>
             )}
         </main>
+        </>
     )
 }
 

@@ -42,6 +42,15 @@ const Home = () => {
 
     return (
         <main className='p-4 h-screen bg-gray-900 text-white'>
+
+
+            <div className="logo flex items-center mb-2">
+                <img src="/logo.png" alt="logo" className="w-24 h-24 mb-4" />
+                <p className="text-4xl font-bold text-white">
+                    Kothamala 
+                    <span className="text-blue-500"> Ai</span>
+                </p>
+            </div>
             <div className="projects flex flex-wrap gap-3">
                 <button
                     onClick={() => setIsModalOpen(true)}

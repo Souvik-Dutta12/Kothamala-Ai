@@ -33,7 +33,16 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
+            <div className="logo flex flex-col items-center mb-8">
+                <img src="/logo.png" alt="logo" className="w-24 h-24 mb-4" />
+                <p className="text-4xl font-bold text-white">
+                    Kothamala 
+                    <span className="text-blue-500"> Ai</span>
+                </p>
+            </div>
+        
+
             <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
                 <form

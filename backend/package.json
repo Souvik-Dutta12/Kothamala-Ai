@@ -1,5 +1,5 @@
 {
-  "name": "smart-echo",
+  "name": "Kothamala Ai",
   "version": "1.0.0",
   "description": "This is an ai developer",
   "main": "server.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "smart-echo"
+    "url": "Kothamala Ai"
   },
   "author": "Souvik",
   "license": "ISC",
