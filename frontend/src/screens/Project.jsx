@@ -333,7 +333,7 @@ const Project = () => {
                                     })
 
                                 }}
-                                className='p-2 px-4 bg-blue-600 text-white hover:bg-gray-500'
+                                className='p-2 px-4 bg-blue-600 rounded-md text-white hover:bg-blue-500'
                             >
                                 Run
                             </button>
