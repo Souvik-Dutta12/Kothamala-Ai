@@ -185,8 +185,8 @@ const Project = () => {
     }
 
     return (
-        <main className='main-container h-screen w-screen flex bg-gray-900 text-white'>
-            <section className="left left-section relative flex flex-col h-screen min-w-96 bg-gray-800">
+        <main className='main-container h-screen w-screen flex flex-col md:flex-row bg-gray-900 text-white'>
+            <section className="left left-section relative flex flex-col h-full w-full md:w-1/4 bg-gray-800">
                 <header className='flex justify-between items-center p-2 px-4 w-full bg-gray-700 absolute z-10 top-0'>
                     <button className='flex gap-2' onClick={() => setIsModalOpen(true)}>
                         <i className="ri-add-fill mr-1"></i>
@@ -254,9 +254,9 @@ const Project = () => {
                 </div>
             </section>
 
-            <section className="right right-section bg-gray-800 flex-grow h-full flex">
+            <section className="right right-section bg-gray-800 flex-grow h-full flex flex-col md:flex-row">
 
-                <div className="explorer h-full max-w-64 min-w-52 bg-gray-700">
+                <div className="explorer h-full w-full md:w-1/4 bg-gray-700">
                     <div className="file-tree w-full">
                         {
                             Object.keys(fileTree).map((file, index) => (
