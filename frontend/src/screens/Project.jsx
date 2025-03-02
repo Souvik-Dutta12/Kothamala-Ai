@@ -96,7 +96,7 @@ const Project = () => {
 
         return (
             <div
-                className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
+                className='overflow-auto bg-gray-800 text-white rounded-sm p-2'
             >
                 <Markdown
                     children={messageObject.text}
@@ -185,9 +185,9 @@ const Project = () => {
     }
 
     return (
-        <main className='h-screen w-screen flex'>
-            <section className="left relative flex flex-col h-screen min-w-96 bg-slate-300">
-                <header className='flex justify-between items-center p-2 px-4 w-full bg-slate-100 absolute z-10 top-0'>
+        <main className='h-screen w-screen flex bg-gray-900 text-white'>
+            <section className="left relative flex flex-col h-screen min-w-96 bg-gray-800">
+                <header className='flex justify-between items-center p-2 px-4 w-full bg-gray-700 absolute z-10 top-0'>
                     <button className='flex gap-2' onClick={() => setIsModalOpen(true)}>
                         <i className="ri-add-fill mr-1"></i>
                         <p>Add collaborator</p>
@@ -202,7 +202,7 @@ const Project = () => {
                         ref={messageBox}
                         className="message-box p-1 flex-grow flex flex-col gap-1 overflow-auto max-h-full scrollbar-hide">
                         {messages.map((msg, index) => (
-                            <div key={index} className={`${msg.sender._id === 'ai' ? 'max-w-80' : 'max-w-52'} ${msg.sender._id == user._id.toString() && 'ml-auto'}  message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}>
+                            <div key={index} className={`${msg.sender._id === 'ai' ? 'max-w-80' : 'max-w-52'} ${msg.sender._id == user._id.toString() && 'ml-auto'}  message flex flex-col p-2 bg-gray-700 w-fit rounded-md`}>
                                 <small className='opacity-65 text-xs'>{msg.sender.email}</small>
                                 <div className='text-sm'>
                                     {msg.sender._id === 'ai' ?
@@ -217,14 +217,14 @@ const Project = () => {
                         <input
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className='p-2 px-4 border-none outline-none flex-grow' type="text" placeholder='Enter message' />
+                            className='p-2 bg-gray-700 text-white px-4 border-none outline-none flex-grow' type="text" placeholder='Enter message' />
                         <button
                             onClick={send}
-                            className='px-5 bg-slate-950 text-white'><i className="ri-send-plane-fill"></i></button>
+                            className='px-5 bg-gray-600 text-white'><i className="ri-send-plane-fill"></i></button>
                     </div>
                 </div>
-                <div className={`sidePanel w-full h-full flex flex-col gap-2 bg-slate-50 absolute transition-all ${isSidePanelOpen ? 'translate-x-0' : '-translate-x-full'} top-0`}>
-                    <header className='flex justify-between items-center px-4 p-2 bg-slate-200'>
+                <div className={`sidePanel w-full h-full flex flex-col gap-2 bg-gray-800 absolute transition-all ${isSidePanelOpen ? 'translate-x-0' : '-translate-x-full'} top-0`}>
+                    <header className='flex justify-between items-center px-4 p-2 bg-gray-700'>
 
                         <h1
                             className='font-semibold text-lg'
@@ -240,8 +240,8 @@ const Project = () => {
 
 
                             return (
-                                <div className="user cursor-pointer hover:bg-slate-200 p-2 flex gap-2 items-center">
-                                    <div className='aspect-square rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600'>
+                                <div className="user cursor-pointer hover:bg-gray-700 p-2 flex gap-2 items-center">
+                                    <div className='aspect-square rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-gray-600'>
                                         <i className="ri-user-fill absolute"></i>
                                     </div>
                                     <h1 className='font-semibold text-lg'>{user.email}</h1>
@@ -254,9 +254,9 @@ const Project = () => {
                 </div>
             </section>
 
-            <section className="right  bg-red-50 flex-grow h-full flex">
+            <section className="right bg-gray-800 flex-grow h-full flex">
 
-                <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
+                <div className="explorer h-full max-w-64 min-w-52 bg-gray-700">
                     <div className="file-tree w-full">
                         {
                             Object.keys(fileTree).map((file, index) => (
@@ -266,7 +266,7 @@ const Project = () => {
                                         setCurrentFile(file)
                                         setOpenFiles([ ...new Set([ ...openFiles, file ]) ])
                                     }}
-                                    className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full">
+                                    className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-gray-600 w-full hover:bg-gray-500">
                                     <p
                                         className='font-semibold text-lg'
                                     >{file}</p>
@@ -280,7 +280,7 @@ const Project = () => {
 
                 <div className="code-editor flex flex-col flex-grow h-full shrink">
 
-                    <div className="top flex justify-between w-full">
+                    <div className="top flex justify-between w-full bg-gray-700 p-2">
 
                         <div className="files flex">
                             {
@@ -288,7 +288,7 @@ const Project = () => {
                                     <button
                                         key={index}
                                         onClick={() => setCurrentFile(file)}
-                                        className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${currentFile === file ? 'bg-slate-400' : ''}`}>
+                                        className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-gray-600 ${currentFile === file ? 'bg-gray-500' : ''}`}>
                                         <p
                                             className='font-semibold text-lg'
                                         >{file}</p>
@@ -333,9 +333,9 @@ const Project = () => {
                                     })
 
                                 }}
-                                className='p-2 px-4 bg-slate-300 text-white'
+                                className='p-2 px-4 bg-blue-600 text-white hover:bg-gray-500'
                             >
-                                run
+                                Run
                             </button>
 
 
@@ -344,7 +344,7 @@ const Project = () => {
                     <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
                         {
                             fileTree[ currentFile ] && (
-                                <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
+                                <div className="code-editor-area h-full overflow-auto flex-grow bg-gray-800">
                                     <pre
                                         className="hljs h-full">
                                         <code
@@ -384,7 +384,7 @@ const Project = () => {
                         <div className="address-bar">
                             <input type="text"
                                 onChange={(e) => setIframeUrl(e.target.value)}
-                                value={iframeUrl} className="w-full p-2 px-4 bg-slate-200" />
+                                value={iframeUrl} className="w-full p-2 px-4 bg-gray-700 text-white" />
                         </div>
                         <iframe src={iframeUrl} className="w-full h-full"></iframe>
                     </div>)
@@ -395,7 +395,7 @@ const Project = () => {
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-4 rounded-md w-96 max-w-full relative">
+                    <div className="bg-gray-800 p-4 rounded-md w-96 max-w-full relative">
                         <header className='flex justify-between items-center mb-4'>
                             <h2 className='text-xl font-semibold'>Select User</h2>
                             <button onClick={() => setIsModalOpen(false)} className='p-2'>
@@ -404,8 +404,8 @@ const Project = () => {
                         </header>
                         <div className="users-list flex flex-col gap-2 mb-16 max-h-96 overflow-auto">
                             {users.map(user => (
-                                <div key={user.id} className={`user cursor-pointer hover:bg-slate-200 ${Array.from(selectedUserId).indexOf(user._id) != -1 ? 'bg-slate-200' : ""} p-2 flex gap-2 items-center`} onClick={() => handleUserClick(user._id)}>
-                                    <div className='aspect-square relative rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600'>
+                                <div key={user.id} className={`user cursor-pointer hover:bg-gray-700 ${Array.from(selectedUserId).indexOf(user._id) != -1 ? 'bg-gray-700' : ""} p-2 flex gap-2 items-center`} onClick={() => handleUserClick(user._id)}>
+                                    <div className='aspect-square relative rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-gray-600'>
                                         <i className="ri-user-fill absolute"></i>
                                     </div>
                                     <h1 className='font-semibold text-lg'>{user.email}</h1>
