@@ -7,3 +7,20 @@
     display: none;
 }
 
+.code-editor-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.code-editor-area::-webkit-scrollbar-track {
+    background: #2d2d2d; /* Dark background */
+}
+
+.code-editor-area::-webkit-scrollbar-thumb {
+    background: #555; /* Dark grey thumb */
+    border-radius: 10px;
+}
+
+.code-editor-area::-webkit-scrollbar-thumb:hover {
+    background: #888; /* Lighter grey on hover */
+}
+
