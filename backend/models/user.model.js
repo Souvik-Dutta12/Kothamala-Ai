@@ -15,29 +15,33 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        select: false
+        select: true
+    },
+
+},{ timestamps:true})
+
+//hashing password before saving user
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
     }
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
 })
-
-
-
-userSchema.statics.hashPassword = async function (password) {
-    return await bcrypt.hash(password, 10);
-}
 
 userSchema.methods.isValidPassword = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.methods.generateJWT = function(){
+userSchema.methods.generateToken = function(){
     return jwt.sign(
-        { email: this.email }, 
+        { _id:this._id,email: this.email }, 
         process.env.JWT_SECRET,
         { expiresIn: '24h'}
     );
 
 }
 
-const user = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
-export default user;
+export default User;

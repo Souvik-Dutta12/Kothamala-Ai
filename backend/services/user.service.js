@@ -1,27 +1,21 @@
-import userModel from "../models/user.model.js";
+import User from "../models/user.model.js";
 
 
-
-export const createUser = async({
-    email,password
-}) =>{
-    if(!email || !password){
-        throw new Error('Email and password are required');
+export const createUser = async({email,password}) =>{
+    
+    const existingUser = await User.findOne({email});
+    if(existingUser){
+        throw new Error('User with this email already exists');
     }
 
-    const hashedPassword = await userModel.hashPassword(password);
-
-    const user = await userModel.create({
+    const user = await User.create({
         email,
-        password:hashedPassword
+        password    
     });
-    
+
     return user;
 }
 
-export const getAllUsers = async ({ userId }) => {
-    const users = await userModel.find({
-        _id: { $ne: userId }
-    });
-    return users;
+export const getAllUsers = async () => {
+   return await User.find().select('-password');
 }

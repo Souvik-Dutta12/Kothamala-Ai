@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
+    model: "gemini-2.5-pro",
     generationConfig: {
         responseMimeType: "application/json",
         temperature: 0.4,
@@ -21,49 +21,44 @@ const model = genAI.getGenerativeModel({
         "app.js": {
             file: {
                 contents: "
-                const express = require('express');
+                    const express = require('express');
 
-                const app = express();
-
-
-                app.get('/', (req, res) => {
-                    res.send('Hello World!');
-                });
+                    const app = express();
 
 
-                app.listen(3000, () => {
-                    console.log('Server is running on port 3000');
-                })
+                    app.get('/', (req, res) => {
+                        res.send('Hello World!');
+                    });
+
+
+                    app.listen(3000, () => {
+                        console.log('Server is running on port 3000');
+                    })
                 "
             
+            },
         },
-    },
 
         "package.json": {
             file: {
                 contents: "
 
-                {
-                    "name": "temp-server",
-                    "version": "1.0.0",
-                    "main": "index.js",
-                    "scripts": {
-                        "test": "echo \"Error: no test specified\" && exit 1"
-                    },
-                    "keywords": [],
-                    "author": "",
-                    "license": "ISC",
-                    "description": "",
-                    "dependencies": {
-                        "express": "^4.21.2"
+                    {
+                        "name": "temp-server",
+                        "version": "1.0.0",
+                        "main": "index.js",
+                        "scripts": {
+                            "test": "echo \"Error: no test specified\" && exit 1"
+                        },
+                        "keywords": [],
+                        "author": "",
+                        "license": "ISC",
+                        "description": "",
+                        "dependencies": {
+                            "express": "^4.21.2"
+                        }
                     }
-}
-
-                
                 "
-                
-                
-
             },
 
         },
@@ -103,6 +98,7 @@ const model = genAI.getGenerativeModel({
 
 export const generateResult = async (prompt) => {
 
+    
     const result = await model.generateContent(prompt);
 
     return result.response.text()

@@ -1,37 +1,64 @@
 import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from '../config/axios'
-import { UserContext } from '../context/user.context'
+import { useUserContext } from '../context/user.context'
 import { Spotlight } from '../components/ui/spotlight-new.jsx'
+import toast from 'react-hot-toast'
 
 
 const Login = () => {
 
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { setUser } = useContext(UserContext)
-
-    const navigate = useNavigate()
+    const { setToken, navigate, setUser } = useUserContext();
 
     function submitHandler(e) {
 
         e.preventDefault()
 
-        axios.post('/users/login', {
-            email,
-            password
-        }).then((res) => {
-            console.log(res.data)
+        try {
+            const res = axios.post('/users/login', {
+                email,
+                password
+            }).then((res) => {
+                
+                localStorage.setItem('token', res.data.token)
+                localStorage.setItem('user', JSON.stringify(res.data.user))
+                setUser(res.data.user)
+                setToken(res.data.token)
+                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
 
-            localStorage.setItem('token', res.data.token)
-            setUser(res.data.user)
-
-            navigate('/')
-        }).catch((err) => {
-            console.log(err.response.data)
-        })
+                toast.success('Successfully Logged In!', {
+                    style: {
+                      border: '1px solid #52525B',
+                      padding: '16px',
+                      color: '#EAB308',
+                      background: '#18181B'
+                    },
+                    iconTheme: {
+                      primary: '#EAB308',
+                      secondary: '#52525B',
+                    },
+                  });                
+                navigate('/')
+            }).catch((err) => {
+                toast.error(err.response.data.errors, {
+                    style: {
+                      border: '1px solid #52525B',
+                      padding: '16px',
+                      color: '#EF4444',
+                      background: '#18181B'
+                    },
+                    iconTheme: {
+                      primary: '#EAB308',
+                      secondary: '#EF4444',
+                    },
+                  });                
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

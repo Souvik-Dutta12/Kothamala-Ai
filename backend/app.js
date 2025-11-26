@@ -21,10 +21,5 @@ app.use('/users',userRoutes);
 app.use("/projects",projectRoutes);
 app.use("/ai",aiRoutes);
 
-app.get("/",(req,res)=>{
-    res.send("Hello world");
-
-});
-
 
 export default app;

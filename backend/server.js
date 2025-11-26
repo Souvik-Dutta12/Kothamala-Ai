@@ -8,7 +8,9 @@ import projectModel from './models/project.model.js';
 import { generateResult } from "./services/ai.service.js";
 
 const port = process.env.PORT || 8080;
+
 const server = http.createServer(app);
+
 const io = new Server(server,{
     cors:{
         origin: '*'
