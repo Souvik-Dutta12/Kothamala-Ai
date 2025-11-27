@@ -7,21 +7,25 @@ import Markdown from 'markdown-to-jsx'
 import hljs from 'highlight.js';
 import { getWebContainer } from '../config/webContainer.js'
 import toast from 'react-hot-toast'
+import 'highlight.js/styles/atom-one-dark.css'
 
 
 function SyntaxHighlightedCode(props) {
-    const ref = useRef(null)
+    const ref = useRef(null);
 
-    React.useEffect(() => {
-        if (ref.current && props.className?.includes('lang-') && window.hljs) {
-            window.hljs.highlightElement(ref.current)
-
-            // hljs won't reprocess the element unless this attribute is removed
-            ref.current.removeAttribute('data-highlighted')
+    useEffect(() => {
+        if (ref.current && props.className?.includes("lang-")) {
+            hljs.highlightElement(ref.current);
         }
-    }, [props.className, props.children])
+    }, [props.className, props.children]);
 
-    return <code {...props} ref={ref} />
+    return (
+        <code
+            {...props}
+            ref={ref}
+            className={`custom-code ${props.className}`}
+        />
+    );
 }
 
 
@@ -36,7 +40,7 @@ const Project = () => {
     const [selectedUserId, setSelectedUserId] = useState(new Set()) // Initialized as Set
     const [project, setProject] = useState(location.state.project)
     const [message, setMessage] = useState('')
-    const { user, setUser, setToken, navigate,setProjects } = useUserContext()
+    const { user, setUser, setToken, navigate, setProjects } = useUserContext()
     const messageBox = React.createRef()
 
     const [users, setUsers] = useState([])
@@ -95,7 +99,7 @@ const Project = () => {
             </div>)
     }
 
-   // Removed appendIncomingMessage and appendOutgoingMessage functions
+    // Removed appendIncomingMessage and appendOutgoingMessage functions
 
     function scrollToBottom() {
         messageBox.current.scrollTop = messageBox.current.scrollHeight
@@ -186,10 +190,10 @@ const Project = () => {
         getProject()
 
     }, [setProject])
-    
+
     //add collaborators
     const addCollaborators = async () => {
-        
+
         try {
             const res = await axios.put("/projects/add-user", {
                 projectId: location.state.project._id,
@@ -209,7 +213,7 @@ const Project = () => {
                 },
             });
             setIsModalOpen(false)
-            
+
         } catch (error) {
             toast.error("Failed to add collaborators", {
                 style: {
@@ -222,7 +226,7 @@ const Project = () => {
                     primary: '#EAB308',
                     secondary: '#EF4444',
                 },
-            });     
+            });
         }
     }
 
@@ -249,18 +253,28 @@ const Project = () => {
     }
 
     //update file tree
-    const saveFileTree = async (ft)=>{
+    const saveFileTree = async (ft) => {
         try {
             const res = await axiosput('/projects/update-file-tree', {
                 projectId: project._id,
                 fileTree: ft
             })
-            console.log(res.data)
-            
+            toast.success("Project created successfully", {
+                style: {
+                    border: '1px solid #52525B',
+                    padding: '16px',
+                    color: '#EAB308',
+                    background: '#18181B'
+                },
+                iconTheme: {
+                    primary: '#EAB308',
+                    secondary: '#52525B',
+                },
+            })
         } catch (error) {
-            
+
         }
-        
+
     }
 
     useEffect(() => {
@@ -297,7 +311,7 @@ const Project = () => {
         })
 
     }, [])
-    
+
 
     return (
 
@@ -323,7 +337,7 @@ const Project = () => {
                                     className="tree-element  cursor-pointer duration-300 p-1  flex items-center gap-2 bg-zinc-900 w-full hover:bg-zinc-800">
                                     <p
                                         className='text-sm ml-5 text-blue-500'
-                                    >file</p>
+                                    >{file}</p>
                                 </button>
 
                             ))
@@ -332,7 +346,7 @@ const Project = () => {
                     </div>
 
                 </div>
-                <div className="code-editor flex flex-col flex-grow h-full w-full shrink">
+                <div className=" flex flex-col flex-grow h-full w-full shrink">
 
                     <div className="top border-b  border-zinc-600 flex justify-between w-full bg-zinc-950 ">
 
@@ -344,7 +358,7 @@ const Project = () => {
                                         onClick={() => setCurrentFile(file)}
 
                                         className={`open-file border-r border-t border-r-zinc-600 border-t-yellow-500  cursor-pointer px-2 py-0 flex items-center justify-between w-fit gap-2 bg-zinc-900 ${currentFile === file ? 'bg-zinc-500' : ''}`}>
-                                        <p className='text-base text-yellow-500 ' >file</p>
+                                        <p className='text-base text-yellow-500 ' >{file}</p>
                                         <i className="ri-close-line  text-yellow-500 px-1 text-base  rounded-md cursor-pointer hover:bg-zinc-800"></i>
                                     </button>
                                 ))
@@ -412,7 +426,7 @@ const Project = () => {
                     <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
                         {
                             fileTree[currentFile] && (
-                                <div className="code-editor-area h-full overflow-auto flex-grow bg-zinc-900">
+                                <div className=" h-full overflow-auto flex-grow bg-zinc-900">
                                     <pre
                                         className="hljs h-full">
                                         <code
@@ -449,16 +463,16 @@ const Project = () => {
 
                 {iframeUrl && webContainer &&
                     (
-                        <div className="preview-container flex min-w-96 flex-col h-full">
+                        <div className="preview-container  flex min-w-96 flex-col h-full">
                             <div className="address-bar">
                                 <input type="text"
                                     onChange={(e) => setIframeUrl(e.target.value)}
                                     value={iframeUrl}
-                                    className="w-full p-2 px-4 bg-zinc-800 text-white outline-none" />
+                                    className="w-full p-2 px-4 text-xs bg-zinc-800 text-white outline-none" />
                             </div>
                             <iframe
                                 src={iframeUrl}
-                                className="w-full h-full"></iframe>
+                                className=" w-full h-full border border-yellow-500"></iframe>
                         </div>
                     )
                 }
